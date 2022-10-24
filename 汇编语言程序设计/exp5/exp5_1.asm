@@ -1,0 +1,32 @@
+DATA    SEGMENT
+    ; 数组BUF
+    BUF DB  38H,73H,1FH
+    ; 用于存放最小值
+    MIN DB  0
+DATA	ENDS
+
+STACK SEGMENT STACK
+    DW 128 DUP(0)
+STACK ENDS
+
+CODE    SEGMENT
+    ASSUME  CS:CODE,DS:DATA
+START:
+    ; 定义数据段
+    MOV AX,DATA
+    MOV DS,AX
+    ; AL初始值为BUF[0]
+    MOV AL,BUF
+    CMP AL,BUF+1
+    JNA LP1
+    MOV AL,BUF+1
+LP1:
+    CMP AL,BUF+2
+    JBE LP2
+    MOV AL,BUF+2
+LP2:
+    MOV MIN,AL
+    MOV AH,4CH
+    INT 21H
+CODE    ENDS
+    END START
